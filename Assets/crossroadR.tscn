@@ -1,0 +1,40 @@
+[gd_scene format=4 uid="uid://dq62vfj328xvh"]
+
+[ext_resource type="Texture2D" uid="uid://0kgxfwtaa03x" path="res://Textures/road04.png" id="1_p8jxb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_snkrr"]
+albedo_texture = ExtResource("1_p8jxb")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_o80p5"]
+_surfaces = [{
+"aabb": AABB(-0.5, -0.15, -0.5, 1, 0.3, 1),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAwACAAEAAAAEAAEAAwAFAAIABQAAAAIABgAEAAAABQAGAAAABwABAAQABwADAAEABgAHAAQABQADAAcABQAHAAYA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAD//wAAAAD///////8AAAAA/////wAA//8AAP//AAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_hd26i"]
+resource_name = "wfcset02_Cube_046"
+_surfaces = [{
+"aabb": AABB(-0.5, -0.15, -0.5, 1, 0.3, 1),
+"attribute_data": PackedByteArray("//8AAAAA//8AAAAA////////ZaYAAJlZ//+ZWQAAZaYAAGWm//+ZWQAAmVn//2WmAAAAAP///////wAAAAD/////ZaYAAJlZ//+ZWQAAZaYAAGWm//+ZWQAAmVn//2Wm"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_snkrr"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAD//wAAVNX///////9U1QAA/////1TV/////wAAVNX//wAAAAD/v/////////+//////wAA/7///wAA////v///AAD//wAAAAD/////AAD///////8AAAAAAAD//wAAAAAAAP//qir//wAAAACqKgAAAAAAAKoq//8AAP//qioAAAAAAAD///////8AAP//AAD//wAA/////wAAAAD//wAAAAD//wAAAAD//wAAAAAAAP////8AAAAAAAAAAAAAVNWqKlTVqipU1aoqVNWqKv9/AAD/fwAA/38AAP9/AAD/f/9//3//f/9//3//f/9/VFVUVVRVVFVUVVRVVFVUVf9/////f////3////9/////P/9//z//f/8//3//P/9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_o80p5")
+
+[node name="crossroad" type="MeshInstance3D" unique_id=517876805]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("ArrayMesh_hd26i")
