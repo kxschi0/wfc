@@ -99,41 +99,16 @@ var wfcrules = {
 var allcells: Dictionary = {
 	
 }
-
+#variables
 var gridsize = 3.0
-
-func _ready() -> void:
-	pass
-	
-
-func _process(delta: float) -> void:
-	pass
-	
-func _instantiate_rando ()->void:
-	var picked = _firstrand()
-	print("THIS IS THE KEY BITCH")
-	print(picked)
-	pass
-#using the for loop to get to randomize pick a cell
-func _firstrand() -> Vector2i:
-	var keys = allcells.keys()
-	keys.shuffle()
-	return keys[1]
-
-# for placing the blocks within the grid
-func _thegrid() -> void:
-	for x in range(gridsize):
-		for z in range(gridsize):
-			allcells[Vector2i(x,z)] = floors.keys().duplicate()
-			_placeblock(Vector3(x, 0.0, z))
-	print("ALL CELLS AND 2I")
-	print(allcells)
+var pickedkey = _firstrand()
 
 @export var generate: bool = false:
 	set(value):
 		if value:
 			_thegrid()
 			_instantiate_rando()
+			
 		generate = false
 func _placeblock(placeblockpos: Vector3) -> void:
 	var block = roadN.instantiate()
@@ -151,6 +126,51 @@ func _deleteblock () -> void:
 	for child in get_children():
 		if child.is_in_group("wfctile"):
 			child.queue_free()
+			
+###############################################################
 
-func _checkneaby () -> void: 
+func _instantiate_rando ()->void:
+	print("======================================")
+	print("Before collapse: ", allcells[pickedkey])
+	print("======================================")
+	var allcells_pickedkey = allcells[pickedkey]
+	var picked_tile = allcells_pickedkey.pick_random()
+	allcells[pickedkey] = [picked_tile]
+	print("After collapse: ", allcells[pickedkey])
+	
+	var neighbors = _checknearby(pickedkey)
+
+	print(neighbors["north"])
+	print(neighbors["south"])
+	print(neighbors["east"])
+	print(neighbors["west"])
+	
+func _kolapsa () -> void:
+	pass
+#using the for loop to get to randomize pick a cell
+func _firstrand() -> Vector2i:
+	var keys = allcells.keys()
+	keys.shuffle()
+	return keys[0]
+	# no collapse, i js reaturned one from array. 10 left still.
+
+# for placing the blocks within the grid
+func _thegrid() -> void:
+	for x in range(gridsize):
+		for z in range(gridsize):
+			allcells[Vector2i(x,z)] = floors.keys().duplicate()
+			_placeblock(Vector3(x, 0.0, z))
+	print("ALL CELLS AND 2I")
+	print(allcells)
+
+func _checknearby (cell: Vector2i) -> Dictionary:
+	var neighbors = {
+		"north": cell + Vector2i(0, 1),
+		"south": cell + Vector2i(0, -1),
+		"east": cell + Vector2i(1, 0),
+		"west": cell + Vector2i(-1, 0)
+	}
+	return neighbors
+	
+	
 	pass
