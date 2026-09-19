@@ -96,18 +96,63 @@ var wfcrules = {
 	}
 };
 
+var allcells: Dictionary = {
+	
+}
+
 var gridsize = 3.0
 
 func _ready() -> void:
 	pass
+	
 
 func _process(delta: float) -> void:
 	pass
 
+#i seriously hope u dont forget what this is abt tomr
+#this is just using the for loop to get to randomize pick a cell
+#u can try to print out the random pick cell
+func _firstrand() -> Vector2i:
+	#down here is what holds the x,z
+	var grid_i: Array[Vector2i] =[]
+	for x in range(gridsize):
+		for z in range(gridsize):
+			grid_i.append(Vector2i(x,z))
+	grid_i.shuffle()
+	print(grid_i[1])
+	return grid_i[1]
+
+# for placing the blocks within the grid
 func _thegrid() -> void:
 	for x in range(gridsize):
 		for z in range(gridsize):
-			_placeblock(Vector3(0.0*x, 0.0, 0.0*z))
-	
+			allcells[Vector2i(x,z)] = floors.keys().duplicate()
+			print("ALL CELLS AND 2I")
+			print(allcells)
+			_placeblock(Vector3(x, 0.0, z))
+
+@export var generate: bool = false:
+	set(value):
+		if value:
+			_thegrid()
+			_firstrand()
+		generate = false
 func _placeblock(placeblockpos: Vector3) -> void:
-	roadN.instantiate()
+	var block = roadN.instantiate()
+	add_child(block)
+	block.owner = get_tree().edited_scene_root
+	block.add_to_group("wfctile")
+	block.position = placeblockpos
+
+@export var delete: bool = false:
+	set(value):
+		if value:
+			_deleteblock()
+		delete = false
+func _deleteblock () -> void:
+	for child in get_children():
+		if child.is_in_group("wfctile"):
+			child.queue_free()
+
+func _checkneaby () -> void: 
+	pass
