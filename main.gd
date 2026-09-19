@@ -31,7 +31,7 @@ var floors = {
 }
 
 #what kind of edge
-#crossing is for edges that will pedestrian lanes
+#crossing is for edges that will have pedestrian lanes
 #rpath is for edges that will have straight roads
 var wfcrules = {
 	"roadN": {
