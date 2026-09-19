@@ -1,9 +1,9 @@
-[gd_scene format=4 uid="uid://g1okxagexcim"]
+[gd_scene format=4 uid="uid://dq62vfj328xvh"]
 
-[ext_resource type="Texture2D" uid="uid://0kgxfwtaa03x" path="res://Textures/road04.png" id="1_hnqas"]
+[ext_resource type="Texture2D" uid="uid://ctkrkmcg5hgsw" path="res://Textures/road06.png" id="1_36hs8"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_snkrr"]
-albedo_texture = ExtResource("1_hnqas")
+albedo_texture = ExtResource("1_36hs8")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_o80p5"]
 _surfaces = [{
@@ -36,5 +36,5 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_o80p5")
 
 [node name="crossroad" type="MeshInstance3D" unique_id=517876805]
-transform = Transform3D(-4.371139e-08, 8.742278e-08, 1, 0, -1, 8.742278e-08, 1, 3.821371e-15, 4.371139e-08, 0, 0, 0)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_hd26i")
