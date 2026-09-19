@@ -1,7 +1,11 @@
-[gd_scene format=3 uid="uid://ba0pl7i87aac8"]
+[gd_scene format=4 uid="uid://ba0pl7i87aac8"]
 
-[ext_resource type="Script" uid="uid://dd0fcyah3t0q7" path="res://wfc.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://cugohb43hihpx" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://b7uoqwfsi75xk" path="res://player.tscn" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://b13wsu2yfyupp" path="res://Assets/roadN.tscn" id="3_7mycd"]
+[ext_resource type="Texture2D" uid="uid://ddqe20mfyxnya" path="res://Textures/road03.png" id="4_272bh"]
+[ext_resource type="Texture2D" uid="uid://p8f7wjl8eqwd" path="res://Textures/Road_normal.jpg" id="5_5vw27"]
+[ext_resource type="Texture2D" uid="uid://dpkj8ejtwa4wb" path="res://Textures/Road_roughness.jpg" id="6_kek77"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -16,8 +20,45 @@ background_color = Color(0.1749846, 0.17498463, 0.1749846, 1)
 sky = SubResource("Sky_0xm2m")
 glow_enabled = true
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qyklt"]
+albedo_texture = ExtResource("4_272bh")
+roughness_texture = ExtResource("6_kek77")
+normal_enabled = true
+normal_scale = 5.0
+normal_texture = ExtResource("5_5vw27")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0x62d"]
+_surfaces = [{
+"aabb": AABB(-0.5, -0.15, -0.5, 1, 0.3, 1),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAwACAAEAAAAEAAEAAwAFAAIABQAAAAIABgAEAAAABQAGAAAABwABAAQABwADAAEABgAHAAQABQADAAcABQAHAAYA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/////wAAAAAAAP////8AAAAA//8AAAAAAAAAAP//AAD///////8AAAAAAAAAAAAA//8AAAAAAAD//wAA//8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xc0jy"]
+resource_name = "wfcset02_Cube_044"
+_surfaces = [{
+"aabb": AABB(-0.5, -0.15, -0.5, 1, 0.3, 1),
+"attribute_data": PackedByteArray("4eMdHB0c4eMdHB0c4ePh4+Hj9p0dHAhi4eMIYh0c9p0dHPad4eMIYh0cCGLh4/adHRwdHOHj4ePh4x0cHRzh4+Hj9p0dHAhi4eMIYh0c9p0dHPad4eMIYh0cCGLh4/ad"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_qyklt"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("/////wAA/78AAP//////vwAA//8AAP+//////////7///wAA//8AgAAA/////wCA////////AIAAAAAA//8AgAAAAAD//wAAAAD//wAAAAAAAP////8AAAAAAAAAAAAAAAAAAAAA/z///wAA////P///AAAAAP8/AAAAAP///z///wAAAAD/v/////////+//////wAA/7///wAA////vwAAAAAAAAAA/////wAAAAAAAP//AAAAAP//AAAAAAAA////f////3////9/////f/9/////f////3////9/////P/9//z//f/8//3//P/9/AAD/fwAA/38AAP9/AAD/f/9/AAD/fwAA/38AAP9/AAD///9/////f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_0x62d")
+
 [node name="Main" type="Node3D" unique_id=319840668]
-script = ExtResource("1_ig7tw")
+script = ExtResource("1_0xm2m")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1608046542]
 environment = SubResource("Environment_h2yge")
@@ -36,5 +77,41 @@ area_range = 32.362
 
 [node name="Player" parent="." unique_id=1319161788 instance=ExtResource("2_0xm2m")]
 transform = Transform3D(-0.2, 0, -1.7484556e-08, 0, 0.2, 0, 1.7484556e-08, 0, -0.2, 0.18413949, 1.7457061, 0.06004697)
+visible = false
+
+[node name="plainroad" type="MeshInstance3D" parent="." unique_id=973028531 instance=ExtResource("3_7mycd")]
+mesh = SubResource("ArrayMesh_xc0jy")
+
+[node name="@MeshInstance3D@22473" type="MeshInstance3D" parent="." unique_id=375648618 instance=ExtResource("3_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+mesh = SubResource("ArrayMesh_xc0jy")
+
+[node name="@MeshInstance3D@22474" type="MeshInstance3D" parent="." unique_id=1396039874 instance=ExtResource("3_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+mesh = SubResource("ArrayMesh_xc0jy")
+
+[node name="@MeshInstance3D@22475" type="MeshInstance3D" parent="." unique_id=315866761 instance=ExtResource("3_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+mesh = SubResource("ArrayMesh_xc0jy")
+
+[node name="@MeshInstance3D@22476" type="MeshInstance3D" parent="." unique_id=945512808 instance=ExtResource("3_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
+mesh = SubResource("ArrayMesh_xc0jy")
+
+[node name="@MeshInstance3D@22477" type="MeshInstance3D" parent="." unique_id=17221666 instance=ExtResource("3_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2)
+mesh = SubResource("ArrayMesh_xc0jy")
+
+[node name="@MeshInstance3D@22478" type="MeshInstance3D" parent="." unique_id=1982548961 instance=ExtResource("3_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+mesh = SubResource("ArrayMesh_xc0jy")
+
+[node name="@MeshInstance3D@22479" type="MeshInstance3D" parent="." unique_id=1865755895 instance=ExtResource("3_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
+mesh = SubResource("ArrayMesh_xc0jy")
+
+[node name="@MeshInstance3D@22480" type="MeshInstance3D" parent="." unique_id=1941978252 instance=ExtResource("3_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
+mesh = SubResource("ArrayMesh_xc0jy")
 
 [editable path="Player"]
