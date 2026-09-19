@@ -2,34 +2,30 @@
 
 extends Node
 const flooring = preload("res://Assets/floor.tscn")
-const road = preload("res://Assets/road.tscn")
+const road = preload("res://Assets/roadN.tscn")
 const sidewalk = preload("res://Assets/sidewalk_nobevel.tscn")
-const crossroad = preload("res://Assets/crossroad.tscn")
-const roadstripe = preload("res://Assets/roadstripe.tscn")
-const roadstripeR = preload ("res://Assets/roadstripeR.tscn")
+const crossroad = preload("res://Assets/crossroadS.tscn")
+const roadstripe = preload("res://Assets/roadstripeN.tscn")
 
 var floors = {
 	"flooring": flooring,
 	"road": road,
 	"sidewalk": sidewalk,
 	"roadstripe":roadstripe,
-	"roadstripeR":roadstripeR,
 	"crossroad": crossroad
 }
 var horizontalr = {
 	"flooring":["flooring"],
 	"road":["road"],
 	"sidewalk":["sidewalk"],
-	"roadstripe": ["roadstripe","crossroad" ],
-	"roadstripeR":["roadstripeR", "crossroad"],
-	"crossroad": ["road"],
+	"roadstripe": ["roadstripe"],
+	"crossroad": ["crossroad"],
 }
 var verticalr = {
 	"flooring": ["flooring", "sidewalk"],
-	"road": ["road", "roadstripe", "roadstripeR", "crossroad"],
-	"sidewalk": ["flooring", "roadstripeR"],
+	"road": ["road", "roadstripe","crossroad"],
+	"sidewalk": ["flooring", "roadstripe"],
 	"roadstripe": ["sidewalk", "crossroad"],
-	"roadstripeR":["roadstripe", "sidewalk"],
 	"crossroad": [ "sidewalk"]
 }
 
@@ -66,6 +62,13 @@ func generate_grid() -> void:
 			else:
 				row += "S"
 		print(row)
+
+@export var delete_button: bool = false:
+	set(value):
+		if value:
+			placedgrid.clear()
+			_clear_previous_tiles()
+			delete_button = false
 
 func _clear_previous_tiles() -> void:
 	for child in get_children():

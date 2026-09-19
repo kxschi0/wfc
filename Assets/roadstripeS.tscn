@@ -1,9 +1,9 @@
-[gd_scene format=4 uid="uid://bs08y1iq6hffi"]
+[gd_scene format=4 uid="uid://buobak6yb43p5"]
 
-[ext_resource type="Texture2D" uid="uid://ddqe20mfyxnya" path="res://Textures/road03.png" id="1_xuxrv"]
+[ext_resource type="Texture2D" uid="uid://yjhe5yn26tj8" path="res://Assets/road01.png" id="1_ljqri"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vivmo"]
-albedo_texture = ExtResource("1_xuxrv")
+albedo_texture = ExtResource("1_ljqri")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_2cqfq"]
 _surfaces = [{
