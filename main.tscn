@@ -82,35 +82,35 @@ visible = false
 [node name="plainroad" type="MeshInstance3D" parent="." unique_id=973028531 instance=ExtResource("3_7mycd")]
 mesh = SubResource("ArrayMesh_xc0jy")
 
-[node name="@MeshInstance3D@22473" type="MeshInstance3D" parent="." unique_id=375648618 instance=ExtResource("3_7mycd")]
+[node name="@MeshInstance3D@21718" type="MeshInstance3D" parent="." unique_id=1690126046 instance=ExtResource("3_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
 mesh = SubResource("ArrayMesh_xc0jy")
 
-[node name="@MeshInstance3D@22474" type="MeshInstance3D" parent="." unique_id=1396039874 instance=ExtResource("3_7mycd")]
+[node name="@MeshInstance3D@21719" type="MeshInstance3D" parent="." unique_id=1910215672 instance=ExtResource("3_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 mesh = SubResource("ArrayMesh_xc0jy")
 
-[node name="@MeshInstance3D@22475" type="MeshInstance3D" parent="." unique_id=315866761 instance=ExtResource("3_7mycd")]
+[node name="@MeshInstance3D@21720" type="MeshInstance3D" parent="." unique_id=1034683554 instance=ExtResource("3_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 mesh = SubResource("ArrayMesh_xc0jy")
 
-[node name="@MeshInstance3D@22476" type="MeshInstance3D" parent="." unique_id=945512808 instance=ExtResource("3_7mycd")]
+[node name="@MeshInstance3D@21721" type="MeshInstance3D" parent="." unique_id=218052042 instance=ExtResource("3_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
 mesh = SubResource("ArrayMesh_xc0jy")
 
-[node name="@MeshInstance3D@22477" type="MeshInstance3D" parent="." unique_id=17221666 instance=ExtResource("3_7mycd")]
+[node name="@MeshInstance3D@21722" type="MeshInstance3D" parent="." unique_id=1492896332 instance=ExtResource("3_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2)
 mesh = SubResource("ArrayMesh_xc0jy")
 
-[node name="@MeshInstance3D@22478" type="MeshInstance3D" parent="." unique_id=1982548961 instance=ExtResource("3_7mycd")]
+[node name="@MeshInstance3D@21723" type="MeshInstance3D" parent="." unique_id=1684368167 instance=ExtResource("3_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 mesh = SubResource("ArrayMesh_xc0jy")
 
-[node name="@MeshInstance3D@22479" type="MeshInstance3D" parent="." unique_id=1865755895 instance=ExtResource("3_7mycd")]
+[node name="@MeshInstance3D@21724" type="MeshInstance3D" parent="." unique_id=1795263020 instance=ExtResource("3_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
 mesh = SubResource("ArrayMesh_xc0jy")
 
-[node name="@MeshInstance3D@22480" type="MeshInstance3D" parent="." unique_id=1941978252 instance=ExtResource("3_7mycd")]
+[node name="@MeshInstance3D@21725" type="MeshInstance3D" parent="." unique_id=496290933 instance=ExtResource("3_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
 mesh = SubResource("ArrayMesh_xc0jy")
 
