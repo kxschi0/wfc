@@ -108,34 +108,32 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	pass
-
-#i seriously hope u dont forget what this is abt tomr
-#this is just using the for loop to get to randomize pick a cell
-#u can try to print out the random pick cell
+	
+func _instantiate_rando ()->void:
+	var picked = _firstrand()
+	print("THIS IS THE KEY BITCH")
+	print(picked)
+	pass
+#using the for loop to get to randomize pick a cell
 func _firstrand() -> Vector2i:
-	#down here is what holds the x,z
-	var grid_i: Array[Vector2i] =[]
-	for x in range(gridsize):
-		for z in range(gridsize):
-			grid_i.append(Vector2i(x,z))
-	grid_i.shuffle()
-	print(grid_i[1])
-	return grid_i[1]
+	var keys = allcells.keys()
+	keys.shuffle()
+	return keys[1]
 
 # for placing the blocks within the grid
 func _thegrid() -> void:
 	for x in range(gridsize):
 		for z in range(gridsize):
 			allcells[Vector2i(x,z)] = floors.keys().duplicate()
-			print("ALL CELLS AND 2I")
-			print(allcells)
 			_placeblock(Vector3(x, 0.0, z))
+	print("ALL CELLS AND 2I")
+	print(allcells)
 
 @export var generate: bool = false:
 	set(value):
 		if value:
 			_thegrid()
-			_firstrand()
+			_instantiate_rando()
 		generate = false
 func _placeblock(placeblockpos: Vector3) -> void:
 	var block = roadN.instantiate()
