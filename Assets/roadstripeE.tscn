@@ -36,4 +36,5 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_2cqfq")
 
 [node name="roadstripe" type="MeshInstance3D" unique_id=499386213]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
 mesh = SubResource("ArrayMesh_yaehf")
