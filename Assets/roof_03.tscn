@@ -1,0 +1,54 @@
+[gd_scene format=4 uid="uid://spjy5fvp0q0k"]
+
+[ext_resource type="Texture2D" uid="uid://btn7l6qmwrvvh" path="res://GLB/wfcCommBldg_metal04_diffuse.jpg" id="1_uubsr"]
+[ext_resource type="Texture2D" uid="uid://dcn6w7dhogrlt" path="res://GLB/wfcCommBldg_metal04_metalness-metal04_roughness.png" id="2_2brsm"]
+[ext_resource type="Texture2D" uid="uid://c2ot4iac6xupr" path="res://GLB/wfcCommBldg_metal04_normal_opengl.jpg" id="3_d0dto"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d6auk"]
+resource_name = "Rusty metal"
+cull_mode = 2
+albedo_texture = ExtResource("1_uubsr")
+metallic = 1.0
+metallic_texture = ExtResource("2_2brsm")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_2brsm")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3_d0dto")
+metadata/_gltf_primary_texture_coord = 1
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_yj6f0"]
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 2, 0.10777373, 2),
+"format": 34896613377,
+"index_count": 78,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAADAAAABAAFAAMABgAFAAQABgAHAAUACAAHAAYACAAJAAcACgAJAAgACgALAAkADAALAAoADAANAAsADgANAAwADgAPAA0AEAAPAA4AEAARAA8AEgARABAAEgATABEAFAATABIAFAAVABMAFgAVABQAFgAXABUAGAAXABYAGAAZABcAGgAZABgAGgAbABkA"),
+"name": "Rusty metal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 28,
+"vertex_data": PackedByteArray("Tez/////AAD//wAAAAAAAP//AAD//wAATez//wAAAACc2AAA//8AAJzYAAAAAAAA68T/////AADrxP//AAAAADqxAAD//wAAOrEAAAAAAACJnf////8AAImd//8AAAAA2IkAAP//AADYiQAAAAAAACZ2/////wAAJnb//wAAAAB1YgAA//8AAHViAAAAAAAAxE7/////AADETv//AAAAABM7AAD//wAAEzsAAAAAAABiJ/////8AAGIn//8AAAAAsRMAAP//AACxEwAAAAAAAAAA/////wAAAAD//wAAAAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_v4grl"]
+resource_name = "wfcCommBldg_Plane"
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 2, 0.10777373, 2),
+"attribute_data": PackedByteArray("TdwV7U3s//8V7ekS//8AABXtFe3/////TdzpEk3sAADpEhXtAAD//7Ej6RKxEwAAsSMV7bET///pEukSAAAAALEjFe2xE///ejTpEmInAAB6NBXtYif//7Ej6RKxEwAAejQV7WIn//9CRekSEzsAAEJFFe0TO///ejTpEmInAABCRRXtEzv//wpW6RLETgAAClYV7cRO//9CRekSEzsAAApWFe3ETv//02bpEnViAADTZhXtdWL//wpW6RLETgAA02YV7XVi//+bd+kSJnYAAJt3Fe0mdv//02bpEnViAACbdxXtJnb//2OI6RLYiQAAY4gV7diJ//+bd+kSJnYAAGOIFe3Yif//K5npEomdAAArmRXtiZ3//2OI6RLYiQAAK5kV7Ymd///0qekSOrEAAPSpFe06sf//K5npEomdAAD0qRXtOrH//7y66RLrxAAAvLoV7evE///0qekSOrEAALy6Fe3rxP//hMvpEpzYAACEyxXtnNj//7y66RLrxAAAhMsV7ZzY//9N3OkSTewAAE3cFe1N7P//hMvpEpzYAAA="),
+"format": 34896613431,
+"index_count": 78,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUAGAAZABoAGAAbABkAHAAdAB4AHAAfAB0AIAAhACIAIAAjACEAJAAlACYAJAAnACUAKAApACoAKAArACkALAAtAC4ALAAvAC0AMAAxADIAMAAzADEA"),
+"material": SubResource("StandardMaterial3D_d6auk"),
+"name": "Rusty metal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 52,
+"vertex_data": PackedByteArray("Tez/////sMP//wAAAACww///AAD//7DDTez//wAAsMMAAP////+ww7ETAAAAALDDsRMAAP//sMMAAP//AACww7ETAAD//7DDYif//wAAsMNiJ/////+ww7ETAAAAALDDYif/////sMMTOwAAAACwwxM7AAD//7DDYif//wAAsMMTOwAA//+ww8RO//8AALDDxE7/////sMMTOwAAAACww8RO/////7DDdWIAAAAAsMN1YgAA//+ww8RO//8AALDDdWIAAP//sMMmdv//AACwwyZ2/////7DDdWIAAAAAsMMmdv////+ww9iJAAAAALDD2IkAAP//sMMmdv//AACww9iJAAD//7DDiZ3//wAAsMOJnf////+ww9iJAAAAALDDiZ3/////sMM6sQAAAACwwzqxAAD//7DDiZ3//wAAsMM6sQAA//+ww+vE//8AALDD68T/////sMM6sQAAAACww+vE/////7DDnNgAAAAAsMOc2AAA//+ww+vE//8AALDDnNgAAP//sMNN7P//AACww03s/////7DDnNgAAAAAsMN7zj1ne849Z3vOPWd7zj1ne849Z3vOPWd7zj1ne849Zz3ng7E954OxPeeDsT3ng7F7zj1ne849Z3vOPWd7zj1nPeeDsT3ng7E954OxPeeDsXvOPWd7zj1ne849Z3vOPWc954OxPeeDsT3ng7E954Oxe849Z3vOPWd7zj1ne849Zz3ng7E954OxPeeDsT3ng7F7zj1ne849Z3vOPWd7zj1nPeeDsT3ng7E954OxPeeDsXvOPWd7zj1ne849Z3vOPWc954OxPeeDsT3ng7E954Ox")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_yj6f0")
+
+[node name="roof03" type="MeshInstance3D" unique_id=604856179]
+transform = Transform3D(0.5, 0, 0, 0, 0, -0.5, 0, 0.27836096, 0, 0, 0, 0)
+mesh = SubResource("ArrayMesh_v4grl")

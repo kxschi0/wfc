@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cqsulqlc0v8vn"]
+
+[ext_resource type="PackedScene" uid="uid://b778d2uwoco4w" path="res://Assets/bldgbig.tscn" id="2_p48dx"]
+[ext_resource type="PackedScene" uid="uid://cwivayumm8b4" path="res://Assets/bldgroof.tscn" id="3_0mpiy"]
+
+[node name="wfcset03" type="Node3D" unique_id=1273057305]
+
+[node name="wfcset03" type="Node3D" parent="." unique_id=236968338]
+
+[node name="bldgbig" parent="wfcset03" unique_id=2036442092 instance=ExtResource("2_p48dx")]
+
+[node name="bldgroof" parent="wfcset03" unique_id=1241420698 instance=ExtResource("3_0mpiy")]

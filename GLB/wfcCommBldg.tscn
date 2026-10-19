@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://fyos3omij5rw"]
+
+[ext_resource type="PackedScene" uid="uid://drlxy2u2exaan" path="res://Assets/cubebldg_10.tscn" id="1_42nix"]
+[ext_resource type="PackedScene" uid="uid://cb3jqrbheolb8" path="res://Assets/cubebldg_8.tscn" id="2_v52bp"]
+[ext_resource type="PackedScene" uid="uid://b7qkhb81eipac" path="res://Assets/cubebldg_6.tscn" id="3_1urrp"]
+[ext_resource type="PackedScene" uid="uid://dg2bxiwmjgp86" path="res://Assets/roof_02.tscn" id="4_twkv6"]
+[ext_resource type="PackedScene" uid="uid://tiwcnjro0syj" path="res://Assets/roof_05.tscn" id="5_8ii7t"]
+[ext_resource type="PackedScene" uid="uid://ydyrpp8sp5n6" path="res://Assets/roof_04.tscn" id="6_6upsv"]
+[ext_resource type="PackedScene" uid="uid://c5s5clreo3n4l" path="res://Assets/roof_01.tscn" id="7_yy2ai"]
+[ext_resource type="PackedScene" uid="uid://spjy5fvp0q0k" path="res://Assets/roof_03.tscn" id="8_ckc3d"]
+[ext_resource type="PackedScene" uid="uid://d3qiospt7hlp6" path="res://Assets/cubebldg_9.tscn" id="9_m7usq"]
+[ext_resource type="PackedScene" uid="uid://b43jj0t0icfiw" path="res://Assets/cubebldg_5.tscn" id="10_1vtk7"]
+[ext_resource type="PackedScene" uid="uid://bua3r71ixfl7g" path="res://Assets/cubebldg_4.tscn" id="11_f37mq"]
+[ext_resource type="PackedScene" uid="uid://daslnpa7xau31" path="res://Assets/cubebldg_3.tscn" id="12_x8diy"]
+[ext_resource type="PackedScene" uid="uid://vagqywyvu6lm" path="res://Assets/cubebldg_7.tscn" id="13_l40ec"]
+[ext_resource type="PackedScene" uid="uid://cc4hp4tdqt3f6" path="res://Assets/cubebldg_2.tscn" id="14_uoiro"]
+[ext_resource type="PackedScene" uid="uid://bd8mymn4liwor" path="res://Assets/cubebldg_1.tscn" id="15_0bgug"]
+
+[node name="Node3D" type="Node3D" unique_id=1516673178]
+
+[node name="wfcCommBldg" type="Node3D" parent="." unique_id=1402463689]
+
+[node name="cubebldg10" parent="wfcCommBldg" unique_id=1871478356 instance=ExtResource("1_42nix")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9998863, 0.010236444, 0.09721323)
+
+[node name="cubebldg8" parent="wfcCommBldg" unique_id=332855518 instance=ExtResource("2_v52bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4612443, -0.013421694, -0.0036595273)
+
+[node name="cubebldg6" parent="wfcCommBldg" unique_id=492492013 instance=ExtResource("3_1urrp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000113735594, 0.010236444, 0.0972132)
+
+[node name="roof02" parent="wfcCommBldg" unique_id=1433613977 instance=ExtResource("4_twkv6")]
+transform = Transform3D(0.5, 0, 0, 0, -4.263218e-08, -0.5, 0, 0.97531056, -2.1855694e-08, -12.581498, 0, 0)
+
+[node name="roof05" parent="wfcCommBldg" unique_id=912087539 instance=ExtResource("5_8ii7t")]
+transform = Transform3D(0.5, 0, 0, 0, -4.130348e-08, 0.5, 0, -0.94491345, -2.1855694e-08, -9.034162, 0, 0)
+
+[node name="roof04" parent="wfcCommBldg" unique_id=874197332 instance=ExtResource("6_6upsv")]
+transform = Transform3D(0.5, 0, 0, 0, -4.130348e-08, 0.5, 0, -0.94491345, -2.1855694e-08, -10.280107, 0, 0)
+
+[node name="roof01" parent="wfcCommBldg" unique_id=1149758317 instance=ExtResource("7_yy2ai")]
+transform = Transform3D(0.5, 0, 0, 0, -1.2167544e-08, -0.5, 0, 0.27836096, -2.1855694e-08, -13.581498, 0, 0)
+
+[node name="roof03" parent="wfcCommBldg" unique_id=604856179 instance=ExtResource("8_ckc3d")]
+transform = Transform3D(0.5, 0, 0, 0, -1.2167544e-08, -0.5, 0, 0.27836096, -2.1855694e-08, -11.407819, 0, 0)
+
+[node name="cubebldg9" parent="wfcCommBldg" unique_id=63621870 instance=ExtResource("9_m7usq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6272874, 0.0084519535, -0.0020596334)
+
+[node name="cubebldg5" parent="wfcCommBldg" unique_id=625503384 instance=ExtResource("10_1vtk7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.015741449, 0)
+
+[node name="cubebldg4" parent="wfcCommBldg" unique_id=960439187 instance=ExtResource("11_f37mq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.316396, 0.125, 0)
+
+[node name="cubebldg3" parent="wfcCommBldg" unique_id=118942090 instance=ExtResource("12_x8diy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9987757, -0.024038468, 0.0016092304)
+
+[node name="cubebldg7" parent="wfcCommBldg" unique_id=1484618883 instance=ExtResource("13_l40ec")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2841926, 0.034146447, 0)
+
+[node name="cubebldg2" parent="wfcCommBldg" unique_id=912515359 instance=ExtResource("14_uoiro")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6709666, 0, 0)
+
+[node name="cubebldg1" parent="wfcCommBldg" unique_id=1439980099 instance=ExtResource("15_0bgug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3981, 0.116071016, 0)
