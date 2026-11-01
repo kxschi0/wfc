@@ -78,3 +78,35 @@ shadow_mesh = SubResource("ArrayMesh_r2wyh")
 
 [node name="cubebldg4" type="MeshInstance3D" unique_id=960439187]
 mesh = SubResource("ArrayMesh_ml4df")
+
+[node name="AreaLight3D" type="AreaLight3D" parent="." unique_id=1855295351]
+transform = Transform3D(1, 8.7418435e-08, 6.1646355e-10, 6.164633e-10, -0.014103042, 0.99990064, 8.741842e-08, -0.99990064, -0.014103042, 0.042456955, 0.09478724, 0.72828007)
+light_color = Color(0.7607843, 1, 1, 1)
+light_energy = 4.359
+area_range = 0.603
+area_attenuation = 2.05
+area_size = Vector2(0.55, 0.613)
+
+[node name="AreaLight3D2" type="AreaLight3D" parent="." unique_id=1897258456]
+transform = Transform3D(1, 8.7418435e-08, 6.1646366e-10, 6.164633e-10, -0.014103042, 0.99990064, 8.741842e-08, -0.99990064, -0.014103042, 0.042456955, 0.09478724, -0.4962244)
+light_color = Color(0.7607843, 1, 1, 1)
+light_energy = 4.359
+area_range = 0.603
+area_attenuation = 2.05
+area_size = Vector2(0.55, 0.613)
+
+[node name="AreaLight3D3" type="AreaLight3D" parent="." unique_id=849109152]
+transform = Transform3D(1, 8.7418435e-08, 6.1646355e-10, 6.164633e-10, -0.014103042, 0.99990064, 8.741842e-08, -0.99990064, -0.014103042, 0.7406807, 0.09478724, 0.0062137097)
+light_color = Color(0.7607843, 1, 1, 1)
+light_energy = 4.359
+area_range = 0.603
+area_attenuation = 2.05
+area_size = Vector2(0.55, 0.613)
+
+[node name="AreaLight3D4" type="AreaLight3D" parent="." unique_id=1151610653]
+transform = Transform3D(1, 8.7418435e-08, 6.1646366e-10, 6.164633e-10, -0.014103042, 0.99990064, 8.741842e-08, -0.99990064, -0.014103042, -0.7431495, 0.09478724, 0.022311628)
+light_color = Color(0.7607843, 1, 1, 1)
+light_energy = 4.359
+area_range = 0.603
+area_attenuation = 2.05
+area_size = Vector2(0.55, 0.613)
