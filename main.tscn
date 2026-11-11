@@ -1,40 +1,31 @@
 [gd_scene format=3 uid="uid://ba0pl7i87aac8"]
 
-[ext_resource type="Script" uid="uid://cgokmfqdanitd" path="res://scripts/city_generator.gd" id="1_272bh"]
-[ext_resource type="PackedScene" uid="uid://bua3r71ixfl7g" path="res://Assets/cubebldg_4.tscn" id="2_dg77c"]
-[ext_resource type="PackedScene" uid="uid://b43jj0t0icfiw" path="res://Assets/cubebldg_5.tscn" id="3_272bh"]
-[ext_resource type="PackedScene" uid="uid://drlxy2u2exaan" path="res://Assets/cubebldg_10.tscn" id="4_b1qrp"]
-[ext_resource type="PackedScene" uid="uid://b7qkhb81eipac" path="res://Assets/cubebldg_6.tscn" id="5_272bh"]
-[ext_resource type="PackedScene" uid="uid://d3qiospt7hlp6" path="res://Assets/cubebldg_9.tscn" id="6_come4"]
-[ext_resource type="PackedScene" uid="uid://c24tknygu3k0r" path="res://Assets/roof.tscn" id="8_2cqfq"]
+[ext_resource type="Texture2D" uid="uid://d13fas5cvuoak" path="res://hdri/overcast_soil_puresky_1k.hdr" id="1_h8e4i"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1yv1y"]
+panorama = ExtResource("1_h8e4i")
 
 [sub_resource type="Sky" id="Sky_0xm2m"]
-sky_material = SubResource("ProceduralSkyMaterial_ig7tw")
+sky_material = SubResource("PanoramaSkyMaterial_1yv1y")
 
 [sub_resource type="Environment" id="Environment_h2yge"]
-background_mode = 1
+background_mode = 2
 background_color = Color(0.18761298, 0.26280752, 0.32265252, 1)
-background_energy_multiplier = 0.59
+background_energy_multiplier = 0.2
 sky = SubResource("Sky_0xm2m")
+tonemap_exposure = 0.91
+tonemap_white = 6.97
 ssr_enabled = true
-glow_enabled = true
-fog_enabled = true
+ssao_enabled = true
 fog_light_color = Color(0.12311912, 0.18639627, 0.18244123, 1)
 fog_light_energy = 1.26
 fog_density = 0.0572
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_albedo = Color(0.091633536, 0.3735315, 0.45917594, 1)
+volumetric_fog_sky_affect = 0.138
 
 [node name="Main" type="Node3D" unique_id=319840668]
-script = ExtResource("1_272bh")
-ground_buildings = Array[PackedScene]([ExtResource("2_dg77c"), ExtResource("3_272bh"), ExtResource("5_272bh"), ExtResource("4_b1qrp")])
-middle_buildings = Array[PackedScene]([ExtResource("6_come4")])
-roof_scene = ExtResource("8_2cqfq")
-origin_offset = Vector3(0, 0.6, 0)
-randomize_seed = false
-seed_value = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1608046542]
 environment = SubResource("Environment_h2yge")

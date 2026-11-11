@@ -4,7 +4,7 @@ extends RefCounted
 ## ONE job: build the list of WFC tiles (rotations included) and the
 ## compatibility table. The rules themselves live in BuildingRules.
 
-const STREET_WEIGHT := 0.5
+var street_weight: float = 0.5 # set by build(); the panel's density slider changes it
 
 var rules: BuildingRules
 var tiles: Array = []
@@ -16,7 +16,8 @@ var roof_count: int = 0
 func _init(p_rules: BuildingRules = null) -> void:
 	rules = p_rules if p_rules != null else BuildingRules.new()
 
-func build(ground: Array[PackedScene], middle: Array[PackedScene], roof_scene: PackedScene, roof_weight: float, empty_weight: float) -> void:
+func build(ground: Array[PackedScene], middle: Array[PackedScene], roof_scene: PackedScene, roof_weight: float, empty_weight: float, p_street_weight: float = 0.5) -> void:
+	street_weight = p_street_weight
 	tiles.clear()
 	ground_count = 0
 	middle_count = 0
@@ -33,7 +34,7 @@ func build(ground: Array[PackedScene], middle: Array[PackedScene], roof_scene: P
 		roof_count = 1
 		_add_fixed("roof", roof_scene, "floor", "sky", roof_weight, "side", true)
 	_add_fixed("air", null, "sky", "sky", empty_weight, "open", false)
-	_add_fixed("street", null, "ground", "sky", STREET_WEIGHT, "open", false)
+	_add_fixed("street", null, "ground", "sky", street_weight, "open", false)
 	_build_compat()
 
 # One building model becomes 4 tiles (turned 0, 90, 180, 270 degrees).
