@@ -9,6 +9,7 @@ var tree: SceneTree
 var enabled: bool
 var steps_per_frame: int
 var pending: Dictionary = {}
+var paused: bool = false # set by the Run Project window (Space key)
 
 func _init(p_view: WfcView, p_tree: SceneTree, p_enabled: bool, p_steps_per_frame: int) -> void:
 	view = p_view
@@ -29,3 +30,5 @@ func show(changed: Dictionary, step: int) -> void:
 			view.update_cell(c)
 		pending.clear()
 		await tree.process_frame
+		while paused:
+			await tree.process_frame

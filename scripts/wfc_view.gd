@@ -41,7 +41,7 @@ func update_cell(cell: Vector3i) -> void:
 		var label := Label3D.new()
 		label.text = str(opts.size())
 		label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-		label.pixel_size = 0.01
+		label.pixel_size = 0.02 # big enough to read in the game window
 		label.font_size = 32
 		spawner.add_temporary(label)
 		label.position = pos

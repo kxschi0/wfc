@@ -58,6 +58,10 @@ const TILES_NODE := "KolapsaTiles" # every generated tile lives under this node
 ## How many steps are printed in full. After that: one line per step.
 @export var detail_steps: int = 3
 
+@export_group("Run Project")
+## Press Run and watch a new city being built live in the game window.
+@export var generate_on_run: bool = true
+
 @export_group("Seed")
 ## Untick to reuse the seed below and get the SAME city again.
 @export var randomize_seed: bool = true
@@ -69,6 +73,21 @@ var is_valid: bool = false
 var problems: PackedStringArray = PackedStringArray()
 var last_result: Dictionary = {} # what the last successful run produced
 var _force_new_seed: bool = false
+
+# What the game window (RunSession) watches while a city is being built.
+var live_solver: WfcSolver
+var live_view: WfcView
+var live_animator: WfcAnimator
+var live_attempt: int = 0
+
+# ------------------------------------------------------------- run project
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return # in the editor, the Generate button / panel is used
+	add_child(RunSession.new(self))
+	if generate_on_run:
+		_run()
 
 # ------------------------------------------------------------------ seed
 
@@ -224,6 +243,9 @@ func _build_buildings(floor_cells: Dictionary, spawner: SceneSpawner) -> bool:
 	var view := WfcView.new(spawner, building_tiles.tiles, solver.wave, show_entropy, origin_offset)
 	var animator := WfcAnimator.new(view, get_tree(), animate, steps_per_frame)
 	solver.animator = animator
+	live_solver = solver
+	live_view = view
+	live_animator = animator
 
 	logger.setup(building_tiles, floor_cells.size(), levels)
 
@@ -231,6 +253,7 @@ func _build_buildings(floor_cells: Dictionary, spawner: SceneSpawner) -> bool:
 	var attempt := 0
 	while not ok and attempt < MAX_ATTEMPTS:
 		attempt += 1
+		live_attempt = attempt
 		view.clear()
 		animator.reset()
 		solver.init_wave()

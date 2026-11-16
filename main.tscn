@@ -50,11 +50,13 @@ area_range = 32.362
 
 [node name="CityGenerator" type="Node3D" parent="." unique_id=785947471]
 script = ExtResource("2_272bh")
+vertical_streets = 1
+density = 0.65
 ground_buildings = Array[PackedScene]([ExtResource("3_5vw27"), ExtResource("4_kek77"), ExtResource("5_4c57u")])
 middle_buildings = Array[PackedScene]([ExtResource("6_efxa6")])
 roof_scene = ExtResource("7_dg77c")
 levels = 6
 origin_offset = Vector3(0, 0.6, 0)
-seed_value = 2949190670
+seed_value = 1282867639
 
 [node name="KolapsaTiles" type="Node3D" parent="CityGenerator" unique_id=778766823]
