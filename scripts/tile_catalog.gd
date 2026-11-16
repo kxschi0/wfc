@@ -22,6 +22,7 @@ const FLOORS := {
 const ROLES := {
 	"straight_ns": ["roadstripeN"],
 	"straight_ew": ["roadstripeE"],
+	"straight_plain": ["roadN"], # plain asphalt, no marking (the default look)
 	"cross4": ["roadN"],
 	"tee_N": ["roadN"],
 	"tee_S": ["roadS"],

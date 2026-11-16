@@ -92,6 +92,8 @@ func _build_settings() -> Control:
 	_spin(box, "blocks", "Block size", 1, 8, 1, "Smallest block of buildings between two streets, in cells.")
 	_spin(box, "horizontal_streets", "Horizontal streets", 0, 6, 1, "Streets running left to right.")
 	_spin(box, "vertical_streets", "Vertical streets", 0, 6, 1, "Streets running front to back.")
+	_spin(box, "road_width", "Road width", 1, 3, 1, "How many cells wide each street is. Wide roads use grid space, so raise the grid size.")
+	_check(box, "plain_roads", "Plain roads", "On: plain asphalt, only crossings are marked. Off: stripe tile on every road cell (best with width 1).")
 
 	_title(box, "Buildings")
 	_check(box, "build_buildings", "Build buildings", "Untick to generate streets, sidewalks and floor only.")

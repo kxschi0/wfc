@@ -18,6 +18,10 @@ const TILES_NODE := "KolapsaTiles" # every generated tile lives under this node
 @export var horizontal_streets: int = 1
 @export var vertical_streets: int = 2
 @export var blocks: int = 3
+## How many cells wide each street is (1 to 3).
+@export_range(1, 3) var road_width: int = 3
+## On: plain asphalt, only crossings are marked. Off: stripe tile on every road cell (use with width 1).
+@export var plain_roads: bool = true
 @export_range(0.0, 1.0) var partial_chance: float = 0.5
 @export_range(0.25, 4.0, 0.25) var tile_size: float = 1.0:
 	set(value):
@@ -139,7 +143,7 @@ func _run() -> void:
 	_set_state("Idle")
 
 func _generate() -> void:
-	var errors := ParamValidator.validate(gridsize, levels, blocks, horizontal_streets, vertical_streets, build_buildings, roof_scene, ground_buildings, middle_buildings, tile_size, density)
+	var errors := ParamValidator.validate(gridsize, levels, blocks, horizontal_streets, vertical_streets, build_buildings, roof_scene, ground_buildings, middle_buildings, tile_size, density, road_width)
 	if not errors.is_empty():
 		_say("Can't generate:\n" + "\n".join(errors), 2)
 		return
@@ -150,8 +154,9 @@ func _generate() -> void:
 
 	var catalog := TileCatalog.new()
 	catalog.check()
-	var streets := StreetPlanner.new(gridsize, blocks, partial_chance)
+	var streets := StreetPlanner.new(gridsize, blocks, partial_chance, road_width)
 	var ground := GroundPlanner.new(gridsize, catalog)
+	ground.plain_roads = plain_roads
 
 	var roads := streets.make_streets(horizontal_streets, vertical_streets)
 	var street_warning := ParamValidator.street_warning(streets)
@@ -263,7 +268,7 @@ func clear_city() -> void:
 	_delete_all()
 
 func number_errors() -> PackedStringArray:
-	return ParamValidator.validate_numbers(gridsize, levels, blocks, horizontal_streets, vertical_streets, build_buildings, tile_size, density)
+	return ParamValidator.validate_numbers(gridsize, levels, blocks, horizontal_streets, vertical_streets, build_buildings, tile_size, density, road_width)
 
 func tileset_errors() -> PackedStringArray:
 	return ParamValidator.validate_tileset(build_buildings, roof_scene, ground_buildings, middle_buildings)

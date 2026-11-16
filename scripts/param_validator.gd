@@ -9,9 +9,11 @@ const MAX_GRIDSIZE := 32 # bigger grids can make the editor unresponsive
 const MIN_LEVELS := 2
 const MAX_LEVELS := 6
 const MAX_STREETS := 6
+const MIN_ROAD_WIDTH := 1
+const MAX_ROAD_WIDTH := 3
 
 # Numbers only (used by the panel on every edit).
-static func validate_numbers(gridsize: int, levels: int, blocks: int, horizontal_streets: int, vertical_streets: int, build_buildings: bool, tile_size: float, density: float) -> PackedStringArray:
+static func validate_numbers(gridsize: int, levels: int, blocks: int, horizontal_streets: int, vertical_streets: int, build_buildings: bool, tile_size: float, density: float, road_width: int = 1) -> PackedStringArray:
 	var errors := PackedStringArray()
 
 	if gridsize < MIN_GRIDSIZE or gridsize > MAX_GRIDSIZE:
@@ -23,10 +25,13 @@ static func validate_numbers(gridsize: int, levels: int, blocks: int, horizontal
 	if horizontal_streets > MAX_STREETS or vertical_streets > MAX_STREETS:
 		errors.append("Use at most %d streets in each direction." % MAX_STREETS)
 
-	if blocks >= 1 and gridsize >= MIN_GRIDSIZE:
-		var fit := _max_streets(gridsize, blocks)
+	if road_width < MIN_ROAD_WIDTH or road_width > MAX_ROAD_WIDTH:
+		errors.append("Road width must be between %d and %d (it is %d)." % [MIN_ROAD_WIDTH, MAX_ROAD_WIDTH, road_width])
+
+	if blocks >= 1 and gridsize >= MIN_GRIDSIZE and road_width >= MIN_ROAD_WIDTH:
+		var fit := _max_streets(gridsize, blocks, road_width)
 		if fit == 0 and (horizontal_streets > 0 or vertical_streets > 0):
-			errors.append("Block size (%d) is too big for grid size (%d): no room for a street." % [blocks, gridsize])
+			errors.append("Block size (%d) and road width (%d) are too big for grid size (%d): no room for a street." % [blocks, road_width, gridsize])
 		else:
 			if horizontal_streets > fit:
 				errors.append("Only %d horizontal street(s) fit in grid size %d with block size %d (you asked for %d)." % [fit, gridsize, blocks, horizontal_streets])
@@ -55,8 +60,8 @@ static func validate_tileset(build_buildings: bool, roof_scene: PackedScene, gro
 	return errors
 
 # Both together (used right before generating).
-static func validate(gridsize: int, levels: int, blocks: int, horizontal_streets: int, vertical_streets: int, build_buildings: bool, roof_scene: PackedScene, ground_buildings: Array[PackedScene], middle_buildings: Array[PackedScene], tile_size: float = 1.0, density: float = 0.5) -> PackedStringArray:
-	var errors := validate_numbers(gridsize, levels, blocks, horizontal_streets, vertical_streets, build_buildings, tile_size, density)
+static func validate(gridsize: int, levels: int, blocks: int, horizontal_streets: int, vertical_streets: int, build_buildings: bool, roof_scene: PackedScene, ground_buildings: Array[PackedScene], middle_buildings: Array[PackedScene], tile_size: float = 1.0, density: float = 0.5, road_width: int = 1) -> PackedStringArray:
+	var errors := validate_numbers(gridsize, levels, blocks, horizontal_streets, vertical_streets, build_buildings, tile_size, density, road_width)
 	errors.append_array(validate_tileset(build_buildings, roof_scene, ground_buildings, middle_buildings))
 	return errors
 
@@ -73,12 +78,14 @@ static func street_warning(streets: StreetPlanner) -> String:
 	return "Placed fewer streets than requested (" + ", ".join(parts) + "). Try a bigger grid or a smaller block size."
 
 # How many streets can ever fit in one direction.
-static func _max_streets(gridsize: int, blocks: int) -> int:
+static func _max_streets(gridsize: int, blocks: int, road_width: int = 1) -> int:
 	var b := maxi(blocks, 0)
-	var room := gridsize - 2 * b
-	if room <= 0:
+	var w := maxi(road_width, 1)
+	# Start positions a street band can take, and the spacing between two bands.
+	var positions := gridsize - 2 * b - w + 1
+	if positions <= 0:
 		return 0
-	return floori(float(room - 1) / float(b + 1)) + 1
+	return floori(float(positions - 1) / float(b + w)) + 1
 
 static func _has_scene(list: Array[PackedScene]) -> bool:
 	for s in list:

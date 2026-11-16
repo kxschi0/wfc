@@ -14,6 +14,9 @@ const DIRS := {
 var gridsize: int
 var catalog: TileCatalog
 var floor_cells: Dictionary = {} # the grey floor cells (buildings may stand here)
+## true = every straight road cell is the plain road (only crossings are marked).
+## false = the old look: a stripe tile on every straight road cell.
+var plain_roads: bool = true
 
 func _init(p_gridsize: int, p_catalog: TileCatalog) -> void:
 	gridsize = p_gridsize
@@ -31,6 +34,8 @@ func plan(roads: Dictionary) -> Dictionary:
 				var n = cell + DIRS[d]
 				if roads.has(n) and not (roads[n]["h"] and roads[n]["v"]):
 					crosswalks[n] = d
+		elif plain_roads:
+			result[cell] = catalog.pick("straight_plain")
 		elif info["h"]:
 			result[cell] = catalog.pick("straight_ew")
 		else:

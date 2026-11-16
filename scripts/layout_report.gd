@@ -6,7 +6,7 @@ extends RefCounted
 func print_report(streets: StreetPlanner, ground: GroundPlanner, roads: Dictionary, plan: Dictionary) -> void:
 	ConsoleFormat.header("LAYOUT")
 	var gridsize: int = streets.gridsize
-	print("gridsize ", gridsize, " | horizontal ", streets.requested_horizontal, " | vertical ", streets.requested_vertical, " | min block size ", streets.blocks)
+	print("gridsize ", gridsize, " | horizontal ", streets.requested_horizontal, " | vertical ", streets.requested_vertical, " | road width ", streets.road_width, " | min block size ", streets.blocks)
 	print(gridsize, " x ", gridsize, " = ", gridsize * gridsize, " cells")
 	for line in streets.notes:
 		print(line)
