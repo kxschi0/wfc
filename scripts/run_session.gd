@@ -5,6 +5,7 @@ extends Node
 ## It adds a camera (only if the scene has none), a small live status panel
 ## and a few keys. It never changes how the city is generated.
 ##   R = new city    Space = pause / resume    N = show / hide the numbers
+##   Left / Right = previous / next frame (Up / Down change how many steps a frame has)
 ##   Up / Down = faster / slower    Left-drag orbit, right-drag move, wheel zoom
 
 const MAX_SPEED := 96
@@ -52,6 +53,9 @@ func _on_state_changed(state: String) -> void:
 	if state == "Generating":
 		paused = false
 		last_message = ""
+		generator.live_animator = null # old frames must never be drawn over a new city
+	elif state == "Idle" and generator.live_animator != null:
+		generator.live_animator.finish(not generator.last_result.is_empty())
 
 func _process(_delta: float) -> void:
 	var solver := generator.live_solver
@@ -67,9 +71,13 @@ func _process(_delta: float) -> void:
 	if solver != null:
 		lines.append("attempt %d  |  step %d  |  undecided cells %d of %d" % [generator.live_attempt, solver.step_count, undecided, total])
 	lines.append("speed %d steps/frame  |  numbers %s" % [generator.steps_per_frame, "on" if generator.show_entropy else "off"])
+	var animator := generator.live_animator
+	if animator != null and animator.step_mode and not animator.frames.is_empty():
+		var of_total := "" if generator.running else " / %d" % animator.frames.size()
+		lines.append("frame %d%s" % [animator.shown + 1, of_total])
 	if last_message != "":
 		lines.append(last_message)
-	lines.append("R new city  |  Space pause  |  N numbers  |  Up/Down speed  |  drag to look")
+	lines.append("Left/Right frame  |  R new city  |  N numbers  |  Up/Down steps per frame  |  drag to look")
 	label.text = "\n".join(lines)
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -88,6 +96,12 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			if generator.live_view != null:
 				generator.live_view.show_entropy = generator.show_entropy
 				generator.live_view.update_all()
+		KEY_RIGHT:
+			if generator.live_animator != null:
+				generator.live_animator.next()
+		KEY_LEFT:
+			if generator.live_animator != null:
+				generator.live_animator.previous()
 		KEY_UP:
 			_set_speed(generator.steps_per_frame * 2)
 		KEY_DOWN:

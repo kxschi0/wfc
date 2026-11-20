@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="WFCtrial"
+config/tags=PackedStringArray("7.1")
 run/main_scene="uid://ba0pl7i87aac8"
 config/features=PackedStringArray("4.7", "Forward Plus")
 

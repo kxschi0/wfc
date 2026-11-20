@@ -61,14 +61,26 @@ const TILES_NODE := "KolapsaTiles" # every generated tile lives under this node
 @export_group("Run Project")
 ## Press Run and watch a new city being built live in the game window.
 @export var generate_on_run: bool = true
+## On: Run Project builds the city of the seed set below, so it matches the editor.
+## Off: it follows "Randomize Seed". Pressing R in the game always makes a new random city.
+@export var run_with_editor_seed: bool = true
 
 @export_group("Seed")
 ## Untick to reuse the seed below and get the SAME city again.
+## (Typing a seed in the Inspector unticks this for you.)
 @export var randomize_seed: bool = true
 ## The seed that made the current city. Copy it to keep a layout you like.
-@export var seed_value: int = 0
+@export var seed_value: int = 0:
+	set(value):
+		seed_value = value
+		# You typed a seed in the Inspector: you want THAT city, so stop randomizing.
+		# Not while the scene loads (not in the tree yet) or while the generator picks a seed itself.
+		if Engine.is_editor_hint() and is_inside_tree() and not _picking_seed and randomize_seed:
+			randomize_seed = false
+			notify_property_list_changed()
 
 var running: bool = false
+var _picking_seed: bool = false
 var is_valid: bool = false
 var problems: PackedStringArray = PackedStringArray()
 var last_result: Dictionary = {} # what the last successful run produced
@@ -86,17 +98,23 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return # in the editor, the Generate button / panel is used
 	add_child(RunSession.new(self))
+	if run_with_editor_seed:
+		randomize_seed = false # only for this run; the setting in the editor is not changed
 	if generate_on_run:
 		_run()
 
 # ------------------------------------------------------------------ seed
 
 # Every random call in all the scripts uses Godot's global generator,
-# so seeding it here once makes the whole city repeatable.
+# so seeding it here makes the street/ground layout repeatable.
 func _apply_seed() -> void:
 	if randomize_seed or _force_new_seed:
 		randomize()
+		_picking_seed = true
 		seed_value = randi()
+		_picking_seed = false
+		if Engine.is_editor_hint():
+			notify_property_list_changed() # show the new seed in the Inspector
 	seed(seed_value)
 	if console_output:
 		print("seed : ", seed_value)
@@ -125,7 +143,11 @@ func _apply_tile_size() -> void:
 # older versions of the plug-in.
 func _clear_scene() -> void:
 	SceneSpawner.new(self).clear()
-	SceneSpawner.new(_container()).clear()
+	# Everything under the container is a generated tile, so remove ALL of it, not only the
+	# tagged ones. A saved scene forgets the tag, so a city saved in the editor used to
+	# survive Run Project and the new city was built on top of it.
+	for tile in _container().get_children():
+		tile.queue_free()
 
 func _reset_result() -> void:
 	last_result = {}
@@ -254,6 +276,10 @@ func _build_buildings(floor_cells: Dictionary, spawner: SceneSpawner) -> bool:
 	while not ok and attempt < MAX_ATTEMPTS:
 		attempt += 1
 		live_attempt = attempt
+		# The streets were built long before this point (many awaited frames ago), and the
+		# editor draws from the same global generator meanwhile. Re-seed right before the
+		# solver starts, so the same seed always gives the same buildings.
+		seed(seed_value + attempt)
 		view.clear()
 		animator.reset()
 		solver.init_wave()
@@ -284,6 +310,8 @@ func start_generation() -> void:
 	_run()
 
 func start_regeneration() -> void:
+	if running:
+		return # don't leave the flag set for a later run
 	_force_new_seed = true
 	_run()
 

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bua3r71ixfl7g" path="res://Assets/cubebldg_4.tscn" id="3_5vw27"]
 [ext_resource type="PackedScene" uid="uid://b7qkhb81eipac" path="res://Assets/cubebldg_6.tscn" id="4_kek77"]
 [ext_resource type="PackedScene" uid="uid://drlxy2u2exaan" path="res://Assets/cubebldg_10.tscn" id="5_4c57u"]
-[ext_resource type="PackedScene" uid="uid://cb3jqrbheolb8" path="res://Assets/cubebldg_8.tscn" id="6_efxa6"]
+[ext_resource type="PackedScene" uid="uid://d3qiospt7hlp6" path="res://Assets/cubebldg_9.tscn" id="6_0rl1p"]
 [ext_resource type="PackedScene" uid="uid://c24tknygu3k0r" path="res://Assets/roof.tscn" id="7_dg77c"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1yv1y"]
@@ -17,7 +17,7 @@ sky_material = SubResource("PanoramaSkyMaterial_1yv1y")
 [sub_resource type="Environment" id="Environment_h2yge"]
 background_mode = 2
 background_color = Color(0.18761298, 0.26280752, 0.32265252, 1)
-background_energy_multiplier = 0.2
+background_energy_multiplier = 0.13
 sky = SubResource("Sky_0xm2m")
 tonemap_exposure = 0.91
 tonemap_white = 6.97
@@ -43,6 +43,7 @@ light_angular_distance = 46.7
 
 [node name="AreaLight3D" type="AreaLight3D" parent="." unique_id=1680569492]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 8.669199, 7.6462173, 11.330325)
+visible = false
 light_color = Color(0.36713982, 0.36284134, 0.34218022, 1)
 light_energy = 16.0
 light_size = 0.833
@@ -50,13 +51,14 @@ area_range = 32.362
 
 [node name="CityGenerator" type="Node3D" parent="." unique_id=785947471]
 script = ExtResource("2_272bh")
-vertical_streets = 1
-density = 0.65
+gridsize = 18
+blocks = 1
+density = 0.6
 ground_buildings = Array[PackedScene]([ExtResource("3_5vw27"), ExtResource("4_kek77"), ExtResource("5_4c57u")])
-middle_buildings = Array[PackedScene]([ExtResource("6_efxa6")])
+middle_buildings = Array[PackedScene]([ExtResource("6_0rl1p")])
 roof_scene = ExtResource("7_dg77c")
 levels = 6
 origin_offset = Vector3(0, 0.6, 0)
-seed_value = 1282867639
+seed_value = 3271744129
 
-[node name="KolapsaTiles" type="Node3D" parent="CityGenerator" unique_id=778766823]
+[node name="KolapsaTiles" type="Node3D" parent="CityGenerator" unique_id=1021407974]
