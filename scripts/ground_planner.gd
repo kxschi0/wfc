@@ -17,6 +17,8 @@ var floor_cells: Dictionary = {} # the grey floor cells (buildings may stand her
 ## true = every straight road cell is the plain road (only crossings are marked).
 ## false = the old look: a stripe tile on every straight road cell.
 var plain_roads: bool = true
+## true = the outer ring of the grid is all sidewalk. It is applied last, so a road that reaches the edge becomes sidewalk.
+var sidewalk_border: bool = true
 
 func _init(p_gridsize: int, p_catalog: TileCatalog) -> void:
 	gridsize = p_gridsize
@@ -52,6 +54,12 @@ func plan(roads: Dictionary) -> Dictionary:
 			else:
 				result[cell] = catalog.pick("floor")
 				floor_cells[cell] = true
+	if sidewalk_border:
+		# Last step: the outer ring replaces whatever was planned there (a road that
+		# reaches the edge becomes sidewalk), so the border is one clean row of sidewalk.
+		for cell in result.keys():
+			if cell.x == 0 or cell.y == 0 or cell.x == gridsize - 1 or cell.y == gridsize - 1:
+				result[cell] = catalog.pick("sidewalk")
 	return result
 
 func _junction_tile(cell: Vector2i, roads: Dictionary) -> String:

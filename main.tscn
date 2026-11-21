@@ -7,6 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://drlxy2u2exaan" path="res://Assets/cubebldg_10.tscn" id="5_4c57u"]
 [ext_resource type="PackedScene" uid="uid://d3qiospt7hlp6" path="res://Assets/cubebldg_9.tscn" id="6_0rl1p"]
 [ext_resource type="PackedScene" uid="uid://c24tknygu3k0r" path="res://Assets/roof.tscn" id="7_dg77c"]
+[ext_resource type="Script" uid="uid://csjedehcxd2iu" path="res://player.gd" id="8_5vw27"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_whsqx"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1yv1y"]
 panorama = ExtResource("1_h8e4i")
@@ -33,6 +36,18 @@ volumetric_fog_sky_affect = 0.138
 
 [node name="Main" type="Node3D" unique_id=319840668]
 
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1319161788]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 2.0645783, 0)
+script = ExtResource("8_5vw27")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1571316450]
+shape = SubResource("CapsuleShape3D_whsqx")
+
+[node name="head" type="Node3D" parent="Player" unique_id=2073939337]
+
+[node name="Camera3D" type="Camera3D" parent="Player/head" unique_id=1082900577]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.63465405, -0.2689253)
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1608046542]
 environment = SubResource("Environment_h2yge")
 
@@ -51,14 +66,22 @@ area_range = 32.362
 
 [node name="CityGenerator" type="Node3D" parent="." unique_id=785947471]
 script = ExtResource("2_272bh")
-gridsize = 18
+gridsize = 12
+vertical_streets = 1
 blocks = 1
-density = 0.6
+road_width = 2
+partial_chance = 0.45
+density = 0.5
 ground_buildings = Array[PackedScene]([ExtResource("3_5vw27"), ExtResource("4_kek77"), ExtResource("5_4c57u")])
 middle_buildings = Array[PackedScene]([ExtResource("6_0rl1p")])
 roof_scene = ExtResource("7_dg77c")
 levels = 6
 origin_offset = Vector3(0, 0.6, 0)
-seed_value = 3271744129
+merge_ground = true
+animate = false
+show_entropy = false
+console_output = false
+run_mode = 1
+seed_value = 841675879
 
 [node name="KolapsaTiles" type="Node3D" parent="CityGenerator" unique_id=1021407974]

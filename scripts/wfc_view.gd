@@ -10,6 +10,8 @@ var wave: Dictionary
 var show_entropy: bool
 var origin_offset: Vector3
 var views: Dictionary = {}
+var body_kind: int = TileBody.NONE # TileBody.STATIC or TileBody.RIGID
+var with_collision: bool = false
 
 func _init(p_spawner: SceneSpawner, p_tiles: Array, p_wave: Dictionary, p_show_entropy: bool, p_origin_offset: Vector3) -> void:
 	spawner = p_spawner
@@ -32,7 +34,14 @@ func update_cell(cell: Vector3i) -> void:
 		var t: Dictionary = tiles[opts[0]]
 		if t["scene"] == null:
 			return
-		var node := spawner.spawn(t["scene"] as PackedScene)
+		var scene := t["scene"] as PackedScene
+		var folder := "UpperFloors"
+		if t["name"] == "roof":
+			folder = "Roofs"
+		elif t["bottom"] == "ground":
+			folder = "GroundFloors"
+		var label_text := "%s_L%d_x%d_z%d" % [scene.resource_path.get_file().get_basename(), cell.y, cell.x, cell.z]
+		var node := spawner.spawn(scene, folder, label_text, body_kind, with_collision)
 		node.position = pos
 		node.rotation_degrees.y = 90.0 * float(t["rot"])
 		views[cell] = node
@@ -43,7 +52,7 @@ func update_cell(cell: Vector3i) -> void:
 		label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		label.pixel_size = 0.02 # big enough to read in the game window
 		label.font_size = 32
-		spawner.add_temporary(label)
+		spawner.add_temporary(label, "EntropyLabels", "Entropy_L%d_x%d_z%d" % [cell.y, cell.x, cell.z])
 		label.position = pos
 		views[cell] = label
 
@@ -54,4 +63,7 @@ func clear() -> void:
 
 func _free_view(view) -> void:
 	if is_instance_valid(view):
+		# Leave the tree now, so the cell's name is free when it is redrawn in the same frame.
+		if view.get_parent() != null:
+			view.get_parent().remove_child(view)
 		view.queue_free()

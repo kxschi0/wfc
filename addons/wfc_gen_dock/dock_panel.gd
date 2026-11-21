@@ -29,6 +29,7 @@ var _param_errors: Label
 var _density_label: Label
 var _chance_label: Label
 var _checks: Dictionary = {}  # setting name -> CheckBox
+var _options: Dictionary = {}  # setting name -> OptionButton
 var _offset_spins: Array[SpinBox] = []
 var _adv_toggle: Button
 var _adv_box: VBoxContainer
@@ -94,6 +95,7 @@ func _build_settings() -> Control:
 	_spin(box, "vertical_streets", "Vertical streets", 0, 6, 1, "Streets running front to back.")
 	_spin(box, "road_width", "Road width", 1, 3, 1, "How many cells wide each street is. Wide roads use grid space, so raise the grid size.")
 	_check(box, "plain_roads", "Plain roads", "On: plain asphalt, only crossings are marked. Off: stripe tile on every road cell (best with width 1).")
+	_check(box, "sidewalk_border", "Sidewalk border", "On: the outer ring of the grid is all sidewalk. A street that reaches the edge is replaced by sidewalk there. Off: streets run to the edge.")
 
 	_title(box, "Buildings")
 	_check(box, "build_buildings", "Build buildings", "Untick to generate streets, sidewalks and floor only.")
@@ -112,6 +114,15 @@ func _build_settings() -> Control:
 	density_row.add_child(_density_label)
 	_row(box, "Building density", density_row, "Higher means more buildings and fewer empty lots.", density)
 	_spin(box, "tile_size", "Tile size", 0.25, 4.0, 0.25, "Scales the whole city. 1 = original size.")
+
+	_title(box, "Physics")
+	_option(box, "ground_body", "Floor, sidewalk, road", ["Static body", "Rigid body"], "What each floor, sidewalk and road tile becomes. Rigid bodies stay put until something touches them.")
+	_option(box, "building_body", "Buildings", ["Static body", "Rigid body"], "What each building piece (shop fronts, floors, roofs) becomes. Rigid bodies stay put until something touches them.")
+	_check(box, "add_collision", "Add collision", "Adds a box collision to every tile, sized to fit its mesh.")
+	_check(box, "merge_ground", "Merge ground tiles", "Joins neighbouring floor, sidewalk and road tiles into one mesh and one collision. Off: one node per tile. Buildings are not affected.")
+
+	_title(box, "Run Project")
+	_option(box, "run_mode", "Run as", ["Developer", "Game"], "Developer: orbit camera, status panel and step-by-step animation. Game: no animation, the city appears at once and your own player can move.")
 
 	_title(box, "Seed")
 	_check(box, "randomize_seed", "New random seed every time", "Untick to reuse the seed value below and get the same city again.")
@@ -315,6 +326,14 @@ func _check(parent: Control, prop: String, text: String, tip: String) -> void:
 	_checks[prop] = c
 	parent.add_child(c)
 
+func _option(parent: Control, prop: String, text: String, items: Array, tip: String) -> void:
+	var o := OptionButton.new()
+	for item in items:
+		o.add_item(item)
+	o.item_selected.connect(_on_option_changed.bind(prop))
+	_options[prop] = o
+	_row(parent, text, o, tip, o)
+
 func _row(parent: Control, text: String, content: Control, tip: String, tip_target: Control) -> void:
 	var h := HBoxContainer.new()
 	var l := Label.new()
@@ -392,6 +411,8 @@ func _sync_inputs() -> void:
 		(_inputs[prop] as Range).set_value_no_signal(generator.get(prop))
 	for prop in _checks:
 		(_checks[prop] as CheckBox).set_pressed_no_signal(generator.get(prop))
+	for prop in _options:
+		(_options[prop] as OptionButton).select(generator.get(prop))
 	var offset := generator.origin_offset
 	_offset_spins[0].set_value_no_signal(offset.x)
 	_offset_spins[1].set_value_no_signal(offset.y)
@@ -511,6 +532,12 @@ func _on_setting_changed(value: float, prop: String) -> void:
 func _on_bool_changed(pressed: bool, prop: String) -> void:
 	if _has_generator():
 		generator.set(prop, pressed)
+		_mark_dirty()
+		_update_ui()
+
+func _on_option_changed(index: int, prop: String) -> void:
+	if _has_generator():
+		generator.set(prop, index)
 		_mark_dirty()
 		_update_ui()
 

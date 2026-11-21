@@ -22,6 +22,9 @@ const TILES_NODE := "KolapsaTiles" # every generated tile lives under this node
 @export_range(1, 3) var road_width: int = 3
 ## On: plain asphalt, only crossings are marked. Off: stripe tile on every road cell (use with width 1).
 @export var plain_roads: bool = true
+## On: the outer ring of the grid is all sidewalk (a street that reaches the edge is replaced by sidewalk there).
+## Off: streets run to the edge of the grid.
+@export var sidewalk_border: bool = true
 @export_range(0.0, 1.0) var partial_chance: float = 0.5
 @export_range(0.25, 4.0, 0.25) var tile_size: float = 1.0:
 	set(value):
@@ -48,6 +51,17 @@ const TILES_NODE := "KolapsaTiles" # every generated tile lives under this node
 ## Weight of "empty air". The density slider scales this.
 @export var empty_space: float = 1.5
 
+@export_group("Physics")
+## What each floor, sidewalk and road tile becomes. Every tile is its own body.
+@export_enum("Static body", "Rigid body") var ground_body: int = 0
+## What each building piece (shop fronts, floors, roofs) becomes.
+@export_enum("Static body", "Rigid body") var building_body: int = 0
+## Adds a box collision to every tile, sized to fit its mesh.
+@export var add_collision: bool = true
+## Joins neighbouring floor, sidewalk and road tiles into one mesh and one collision.
+## Off: every tile stays its own node. (Buildings are not affected.)
+@export var merge_ground: bool = false
+
 @export_group("Building debug")
 @export var animate: bool = true
 @export var steps_per_frame: int = 3
@@ -61,6 +75,9 @@ const TILES_NODE := "KolapsaTiles" # every generated tile lives under this node
 @export_group("Run Project")
 ## Press Run and watch a new city being built live in the game window.
 @export var generate_on_run: bool = true
+## Developer: orbit camera, status panel and the step-by-step animation (the keys listed there).
+## Game: no camera or panel of ours and no animation. The city appears at once and your own player can move.
+@export_enum("Developer", "Game") var run_mode: int = 0
 ## On: Run Project builds the city of the seed set below, so it matches the editor.
 ## Off: it follows "Randomize Seed". Pressing R in the game always makes a new random city.
 @export var run_with_editor_seed: bool = true
@@ -97,7 +114,13 @@ var live_attempt: int = 0
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return # in the editor, the Generate button / panel is used
-	add_child(RunSession.new(self))
+	if run_mode == 1:
+		# Game: only for this run (the settings in the editor are not changed).
+		animate = false
+		show_entropy = false
+		delay = 0.0
+	else:
+		add_child(RunSession.new(self))
 	if run_with_editor_seed:
 		randomize_seed = false # only for this run; the setting in the editor is not changed
 	if generate_on_run:
@@ -198,6 +221,7 @@ func _generate() -> void:
 	var streets := StreetPlanner.new(gridsize, blocks, partial_chance, road_width)
 	var ground := GroundPlanner.new(gridsize, catalog)
 	ground.plain_roads = plain_roads
+	ground.sidewalk_border = sidewalk_border
 
 	var roads := streets.make_streets(horizontal_streets, vertical_streets)
 	var street_warning := ParamValidator.street_warning(streets)
@@ -210,13 +234,18 @@ func _generate() -> void:
 	await get_tree().process_frame
 	var spawner := SceneSpawner.new(_container())
 	var placer := GroundPlacer.new(spawner, catalog)
-	for cell in plan:
-		if not roads.has(cell):
+	placer.body_kind = ground_body
+	placer.with_collision = add_collision
+	if merge_ground:
+		await _place_ground_merged(placer, plan, roads)
+	else:
+		for cell in plan:
+			if not roads.has(cell):
+				placer.place(plan[cell], cell)
+		for cell in roads:
 			placer.place(plan[cell], cell)
-	for cell in roads:
-		placer.place(plan[cell], cell)
-		if delay > 0.0:
-			await get_tree().create_timer(delay).timeout
+			if delay > 0.0:
+				await get_tree().create_timer(delay).timeout
 
 	if not build_buildings:
 		last_result = {"streets_only": true}
@@ -224,6 +253,22 @@ func _generate() -> void:
 		return
 	var ok: bool = await _build_buildings(ground.floor_cells, spawner)
 	_finish(ok)
+
+# The "Merge ground" option: floor and sidewalks first, then the roads, one piece per rectangle.
+func _place_ground_merged(placer: GroundPlacer, plan: Dictionary, roads: Dictionary) -> void:
+	var other_cells: Dictionary = {}
+	for cell in plan:
+		if not roads.has(cell):
+			other_cells[cell] = plan[cell]
+	var road_cells: Dictionary = {}
+	for cell in roads:
+		road_cells[cell] = plan[cell]
+	for piece in GroundMerger.rectangles(other_cells):
+		placer.place_merged(piece["tile"], piece["rect"])
+	for piece in GroundMerger.rectangles(road_cells):
+		placer.place_merged(piece["tile"], piece["rect"])
+		if delay > 0.0:
+			await get_tree().create_timer(delay).timeout
 
 func _finish(ok: bool) -> void:
 	if not ok:
@@ -263,6 +308,8 @@ func _build_buildings(floor_cells: Dictionary, spawner: SceneSpawner) -> bool:
 
 	var solver := WfcSolver.new(building_tiles.tiles, building_tiles.compat, floor_cells, gridsize, levels, logger, null)
 	var view := WfcView.new(spawner, building_tiles.tiles, solver.wave, show_entropy, origin_offset)
+	view.body_kind = building_body
+	view.with_collision = add_collision
 	var animator := WfcAnimator.new(view, get_tree(), animate, steps_per_frame)
 	solver.animator = animator
 	live_solver = solver
