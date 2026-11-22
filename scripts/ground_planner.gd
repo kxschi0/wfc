@@ -17,7 +17,8 @@ var floor_cells: Dictionary = {} # the grey floor cells (buildings may stand her
 ## true = every straight road cell is the plain road (only crossings are marked).
 ## false = the old look: a stripe tile on every straight road cell.
 var plain_roads: bool = true
-## true = the outer ring of the grid is all sidewalk. It is applied last, so a road that reaches the edge becomes sidewalk.
+## true = the outer ring of the grid is sidewalk, except where a road reaches the edge (the road stays a road).
+## false = no ring at all: the cells at the edge are floor (or the usual sidewalk beside a street).
 var sidewalk_border: bool = true
 
 func _init(p_gridsize: int, p_catalog: TileCatalog) -> void:
@@ -55,11 +56,12 @@ func plan(roads: Dictionary) -> Dictionary:
 				result[cell] = catalog.pick("floor")
 				floor_cells[cell] = true
 	if sidewalk_border:
-		# Last step: the outer ring replaces whatever was planned there (a road that
-		# reaches the edge becomes sidewalk), so the border is one clean row of sidewalk.
+		# Last step: the outer ring becomes sidewalk. Roads are left alone, so a road
+		# that reaches the edge stays a road.
 		for cell in result.keys():
-			if cell.x == 0 or cell.y == 0 or cell.x == gridsize - 1 or cell.y == gridsize - 1:
+			if _is_grid_edge(cell) and not roads.has(cell):
 				result[cell] = catalog.pick("sidewalk")
+				floor_cells.erase(cell) # no building on the border
 	return result
 
 func _junction_tile(cell: Vector2i, roads: Dictionary) -> String:
@@ -71,9 +73,12 @@ func _junction_tile(cell: Vector2i, roads: Dictionary) -> String:
 		return catalog.pick("tee_" + missing[0])
 	return catalog.pick("cross4")
 
+func _is_grid_edge(cell: Vector2i) -> bool:
+	return cell.x == 0 or cell.y == 0 or cell.x == gridsize - 1 or cell.y == gridsize - 1
+
+# A cell right next to a road. (The outer ring is NOT decided here: it belongs to the
+# "sidewalk border" option, applied at the end of plan().)
 func _is_block_edge(cell: Vector2i, roads: Dictionary) -> bool:
-	if cell.x == 0 or cell.y == 0 or cell.x == gridsize - 1 or cell.y == gridsize - 1:
-		return true
 	for dx in [-1, 0, 1]:
 		for dz in [-1, 0, 1]:
 			if roads.has(cell + Vector2i(dx, dz)):

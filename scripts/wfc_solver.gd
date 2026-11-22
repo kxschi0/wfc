@@ -13,6 +13,9 @@ var gridsize: int
 var levels: int
 var logger: WfcLogger
 var animator: WfcAnimator
+## The solver's own dice. The generator seeds it before every attempt. Because nothing else
+## uses it, other code drawing random numbers between frames can't change the city.
+var rng := RandomNumberGenerator.new()
 
 func _init(p_tiles: Array, p_compat: Array, p_floor_cells: Dictionary, p_gridsize: int, p_levels: int, p_logger: WfcLogger, p_animator: WfcAnimator) -> void:
 	tiles = p_tiles
@@ -83,7 +86,7 @@ func lowest_entropy_cell() -> Vector3i:
 		var opts: Array = wave[c]
 		if opts.size() <= 1:
 			continue
-		var h: float = entropy(opts) + randf() * 0.001
+		var h: float = entropy(opts) + rng.randf() * 0.001
 		if h < best_h:
 			best_h = h
 			best = c
@@ -94,7 +97,7 @@ func collapse(cell: Vector3i) -> void:
 	var total: float = 0.0
 	for i in opts:
 		total += float(tiles[i]["weight"])
-	var roll: float = randf() * total
+	var roll: float = rng.randf() * total
 	var roll_start: float = roll
 	var choice: int = opts[opts.size() - 1]
 	for i in opts:

@@ -126,12 +126,13 @@ func _build_settings() -> Control:
 
 	_title(box, "Seed")
 	_check(box, "randomize_seed", "New random seed every time", "Untick to reuse the seed value below and get the same city again.")
-	var seed_spin := _make_spin("seed_value", 0, 2147483647, 1)
+	var seed_spin := _make_spin("seed_value", 0, 4294967295, 1)
 	var copy := _button("Copy", "ActionCopy", _on_copy_seed)
 	var seed_row := HBoxContainer.new()
 	seed_row.add_child(seed_spin)
 	seed_row.add_child(copy)
 	_row(box, "Seed value", seed_row, "Untick the box above and reuse this number to get the same city again.", seed_spin)
+	_check(box, "run_with_editor_seed", "Run Project uses this seed", "On: Run Project builds the city of the seed above, so it matches the editor. Off: it follows the box above (press R in the game for a new random city).")
 
 	_adv_toggle = Button.new()
 	_adv_toggle.text = "Advanced"
@@ -472,6 +473,15 @@ func _make_item(scene: PackedScene, title: String, kind: String, index: int) -> 
 		remove.flat = true
 		remove.tooltip_text = "Remove from the library (the file itself is not deleted)."
 		box.add_child(remove)
+	if kind == "ground" or kind == "middle":
+		var style := OptionButton.new()
+		for style_name in BuildingTiles.STYLE_NAMES:
+			style.add_item(style_name)
+		style.select(generator.asset_style(kind, index) if _has_generator() else 0)
+		style.tooltip_text = "Style. A building only gets middle floors of its own style. Any fits every style."
+		style.item_selected.connect(_on_style_changed.bind(kind, index))
+		box.add_child(style)
+		box.move_child(style, 2) # right under the name
 	AssetThumb.apply.call_deferred(rect, scene)
 	return card
 
@@ -505,6 +515,11 @@ func _add_paths(kind: String, paths: PackedStringArray) -> void:
 	if added > 0:
 		_mark_dirty()
 
+func _on_style_changed(style: int, kind: String, index: int) -> void:
+	if _has_generator():
+		generator.set_asset_style(kind, index, style)
+		_mark_dirty()
+
 func _on_remove_asset(kind: String, index: int) -> void:
 	if _has_generator():
 		generator.remove_asset(kind, index)
@@ -527,6 +542,9 @@ func _on_setting_changed(value: float, prop: String) -> void:
 		(_inputs[prop] as Range).set_value_no_signal(old)
 		_param_errors.text = "Not changed:\n" + "\n".join(errors)
 	_update_value_labels()
+	if prop == "seed_value":
+		# Typing a seed unticks "New random seed every time" inside the generator. Show it.
+		(_checks["randomize_seed"] as CheckBox).set_pressed_no_signal(generator.randomize_seed)
 	_update_ui()
 
 func _on_bool_changed(pressed: bool, prop: String) -> void:

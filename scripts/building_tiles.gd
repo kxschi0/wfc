@@ -4,6 +4,10 @@ extends RefCounted
 ## ONE job: build the list of WFC tiles (rotations included) and the
 ## compatibility table. The rules themselves live in BuildingRules.
 
+## Style of an asset: 0 = Any, then A to D. A building only gets middle floors of its own style.
+## "Any" fits every style. If no asset has a style, everything is "Any" and nothing changes.
+const STYLE_NAMES := ["Any", "A", "B", "C", "D"]
+
 var street_weight: float = 0.5 # set by build(); the panel's density slider changes it
 
 var rules: BuildingRules
@@ -16,36 +20,67 @@ var roof_count: int = 0
 func _init(p_rules: BuildingRules = null) -> void:
 	rules = p_rules if p_rules != null else BuildingRules.new()
 
-func build(ground: Array[PackedScene], middle: Array[PackedScene], roof_scene: PackedScene, roof_weight: float, empty_weight: float, p_street_weight: float = 0.5) -> void:
+func build(ground: Array[PackedScene], middle: Array[PackedScene], roof_scene: PackedScene, roof_weight: float, empty_weight: float, p_street_weight: float = 0.5, ground_styles: Array = [], middle_styles: Array = []) -> void:
 	street_weight = p_street_weight
 	tiles.clear()
 	ground_count = 0
 	middle_count = 0
 	roof_count = 0
-	for s in ground:
+	var styles := _styles_in_use(ground_styles, middle_styles)
+	for i in range(ground.size()):
+		var s := ground[i]
 		if s != null:
 			ground_count += 1
-		_add_rotated(s, "ground", "floor")
-	for s in middle:
+		# A ground building of style "Any" is offered once per style (its weight is shared).
+		var own := _style_at(ground_styles, i)
+		var variants: Array = styles if own == 0 else [own]
+		for v in variants:
+			_add_rotated(s, "ground", _floor_socket(v), v, 1.0 / float(variants.size()))
+	for i in range(middle.size()):
+		var s := middle[i]
 		if s != null:
 			middle_count += 1
-		_add_rotated(s, "floor", "floor")
+		var own := _style_at(middle_styles, i)
+		var variants: Array = styles if own == 0 else [own]
+		for v in variants:
+			_add_rotated(s, _floor_socket(v), _floor_socket(v), v, 1.0)
 	if roof_scene != null:
 		roof_count = 1
-		_add_fixed("roof", roof_scene, "floor", "sky", roof_weight, "side", true)
+		# The roof closes a building of any style ("floor*" matches every floor socket).
+		_add_fixed("roof", roof_scene, "floor*", "sky", roof_weight, "side", true)
 	_add_fixed("air", null, "sky", "sky", empty_weight, "open", false)
 	_add_fixed("street", null, "ground", "sky", street_weight, "open", false)
 	_build_compat()
 
+# The styles a stack can have. Only the styles that are really used (1 to 4); [0] when none is.
+func _styles_in_use(ground_styles: Array, middle_styles: Array) -> Array:
+	var used: Array = []
+	for list in [ground_styles, middle_styles]:
+		for v in list:
+			if int(v) > 0 and int(v) < STYLE_NAMES.size() and not used.has(int(v)):
+				used.append(int(v))
+	used.sort()
+	return used if not used.is_empty() else [0]
+
+func _style_at(list: Array, index: int) -> int:
+	if index < 0 or index >= list.size():
+		return 0
+	return clampi(int(list[index]), 0, STYLE_NAMES.size() - 1)
+
+func _floor_socket(style: int) -> String:
+	return "floor" if style == 0 else "floor_" + STYLE_NAMES[style]
+
 # One building model becomes 4 tiles (turned 0, 90, 180, 270 degrees).
-func _add_rotated(scene: PackedScene, bottom: String, top: String) -> void:
+func _add_rotated(scene: PackedScene, bottom: String, top: String, style: int = 0, weight: float = 1.0) -> void:
 	if scene == null:
 		return
+	var level_name := "ground" if bottom == "ground" else "floor"
+	var tag: String = "" if style == 0 else "_" + STYLE_NAMES[style]
 	for rot in range(4):
 		var t: Dictionary = {
-			"name": scene.resource_path.get_file().get_basename() + "_" + bottom + "_r" + str(rot),
+			"name": scene.resource_path.get_file().get_basename() + "_" + level_name + tag + "_r" + str(rot),
 			"scene": scene, "rot": rot, "bottom": bottom, "top": top,
-			"weight": 1.0, "solid": true, "sock": {},
+			"weight": weight, "solid": true, "sock": {},
 		}
 		for d in range(2, 6):
 			# Which side of the UNROTATED model ends up facing world direction d?

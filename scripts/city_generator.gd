@@ -41,6 +41,9 @@ const TILES_NODE := "KolapsaTiles" # every generated tile lives under this node
 @export var ground_buildings: Array[PackedScene] = []
 ## Buildings that can ONLY sit on top of another building (window floors).
 @export var middle_buildings: Array[PackedScene] = []
+## Style of each Ground / Middle asset, in the same order (0 = Any, 1 to 4 = A to D). Set in the panel.
+@export_storage var ground_styles: Array[int] = []
+@export_storage var middle_styles: Array[int] = []
 @export var roof_scene: PackedScene
 @export var levels: int = 4
 ## Shift every building (set Y to lift buildings on top of the floor tile).
@@ -300,7 +303,7 @@ func _build_buildings(floor_cells: Dictionary, spawner: SceneSpawner) -> bool:
 		return false
 
 	var building_tiles := BuildingTiles.new()
-	building_tiles.build(ground_buildings, middle_buildings, roof_scene, roof, _empty_weight(), _street_weight())
+	building_tiles.build(ground_buildings, middle_buildings, roof_scene, roof, _empty_weight(), _street_weight(), ground_styles, middle_styles)
 
 	var logger: WfcLogger = WfcLogger.new() # silent
 	if console_output:
@@ -323,10 +326,9 @@ func _build_buildings(floor_cells: Dictionary, spawner: SceneSpawner) -> bool:
 	while not ok and attempt < MAX_ATTEMPTS:
 		attempt += 1
 		live_attempt = attempt
-		# The streets were built long before this point (many awaited frames ago), and the
-		# editor draws from the same global generator meanwhile. Re-seed right before the
-		# solver starts, so the same seed always gives the same buildings.
-		seed(seed_value + attempt)
+		# The solver has its own dice (solver.rng), seeded here, so nothing that happens
+		# between frames can change the buildings: the same seed gives the same buildings.
+		solver.rng.seed = seed_value + attempt
 		view.clear()
 		animator.reset()
 		solver.init_wave()
@@ -337,7 +339,7 @@ func _build_buildings(floor_cells: Dictionary, spawner: SceneSpawner) -> bool:
 
 	if not ok:
 		view.clear() # don't leave a half-built city behind
-		_say("Gave up after %d failed attempts. The building rules may be too strict for this layout. Try Regenerate, a bigger grid, or more assets." % attempt, 2)
+		_say("Gave up after %d failed attempts (seed %d). The building rules may be too strict for this layout. Try Regenerate, a bigger grid, or more assets." % [attempt, seed_value], 2)
 		return false
 
 	view.update_all()
@@ -440,10 +442,38 @@ func remove_asset(kind: String, index: int) -> void:
 				list.assign(ground_buildings)
 				list.remove_at(index)
 				ground_buildings = list
+				_remove_style("ground", index)
 		"middle":
 			if index >= 0 and index < middle_buildings.size():
 				var list: Array[PackedScene] = []
 				list.assign(middle_buildings)
 				list.remove_at(index)
 				middle_buildings = list
+				_remove_style("middle", index)
 	assets_changed.emit()
+
+# The style of one Ground or Middle asset: 0 = Any, 1 to 4 = A to D.
+func asset_style(kind: String, index: int) -> int:
+	var list: Array[int] = ground_styles if kind == "ground" else middle_styles
+	return list[index] if index >= 0 and index < list.size() else 0
+
+func set_asset_style(kind: String, index: int, style: int) -> void:
+	var list: Array[int] = []
+	list.assign(ground_styles if kind == "ground" else middle_styles)
+	while list.size() <= index:
+		list.append(0)
+	list[index] = style
+	if kind == "ground":
+		ground_styles = list
+	else:
+		middle_styles = list
+
+func _remove_style(kind: String, index: int) -> void:
+	var list: Array[int] = []
+	list.assign(ground_styles if kind == "ground" else middle_styles)
+	if index < list.size():
+		list.remove_at(index)
+	if kind == "ground":
+		ground_styles = list
+	else:
+		middle_styles = list
