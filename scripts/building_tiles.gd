@@ -1,11 +1,7 @@
 @tool
 class_name BuildingTiles
 extends RefCounted
-## ONE job: build the list of WFC tiles (rotations included) and the
-## compatibility table. The rules themselves live in BuildingRules.
 
-## Style of an asset: 0 = Any, then A to D. A building only gets middle floors of its own style.
-## "Any" fits every style. If no asset has a style, everything is "Any" and nothing changes.
 const STYLE_NAMES := ["Any", "A", "B", "C", "D"]
 
 var street_weight: float = 0.5 # set by build(); the panel's density slider changes it
@@ -70,7 +66,6 @@ func _style_at(list: Array, index: int) -> int:
 func _floor_socket(style: int) -> String:
 	return "floor" if style == 0 else "floor_" + STYLE_NAMES[style]
 
-# One building model becomes 4 tiles (turned 0, 90, 180, 270 degrees).
 func _add_rotated(scene: PackedScene, bottom: String, top: String, style: int = 0, weight: float = 1.0) -> void:
 	if scene == null:
 		return

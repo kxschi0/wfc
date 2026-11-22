@@ -1,10 +1,9 @@
 @tool
 class_name WfcSolver
 extends RefCounted
-## ONE job: Wave Function Collapse. It never draws and never prints itself.
-## It only TELLS `logger` and `animator` what happened.
 
-var wave: Dictionary = {} # Vector3i -> Array of tile indexes still possible
+
+var wave: Dictionary = {} 
 var step_count: int = 0
 var tiles: Array
 var compat: Array
@@ -13,8 +12,7 @@ var gridsize: int
 var levels: int
 var logger: WfcLogger
 var animator: WfcAnimator
-## The solver's own dice. The generator seeds it before every attempt. Because nothing else
-## uses it, other code drawing random numbers between frames can't change the city.
+
 var rng := RandomNumberGenerator.new()
 
 func _init(p_tiles: Array, p_compat: Array, p_floor_cells: Dictionary, p_gridsize: int, p_levels: int, p_logger: WfcLogger, p_animator: WfcAnimator) -> void:
@@ -46,7 +44,6 @@ func init_wave() -> void:
 					opts.append(i)
 				wave[Vector3i(x, y, z)] = opts
 
-# Repeats: pick the cell with the fewest options, roll the dice, ripple the effect.
 func solve() -> bool:
 	step_count = 0
 	var changed: Dictionary = {}
