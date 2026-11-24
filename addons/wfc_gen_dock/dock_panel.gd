@@ -185,6 +185,9 @@ func _build_settings() -> Control:
 	_check(_adv_box, "log_steps", "Print every step", "Writes each WFC step to the Output panel.")
 	_spin(_adv_box, "detail_steps", "Steps printed in full", 0, 20, 1, "After this many steps, only one line per step is printed.")
 
+	_title(_adv_box, "Safety")
+	_check(_adv_box, "auto_regenerate", "Auto regenerate", "After building, the scene is checked. If blocks, sidewalks, roads or buildings are missing, build the same seed again (up to 3 times). Off: you only get a message and press Regenerate yourself.")
+
 	_param_errors = Label.new()
 	_param_errors.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_param_errors.modulate = Color(1.0, 0.55, 0.45)
