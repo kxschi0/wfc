@@ -303,10 +303,19 @@ func _button(text: String, icon_name: String, callback: Callable) -> Button:
 	return b
 
 func _title(parent: Control, text: String) -> void:
+	var gap := 8.0 * EditorInterface.get_editor_scale()
+	var font_px := roundi(20.0 * EditorInterface.get_editor_scale())
+	var space_above := Control.new()
+	space_above.custom_minimum_size = Vector2(0, gap)
+	parent.add_child(space_above)
 	var l := Label.new()
 	l.text = text
 	l.theme_type_variation = &"HeaderSmall"
+	l.add_theme_font_size_override("font_size", font_px)
 	parent.add_child(l)
+	var space_below := Control.new()
+	space_below.custom_minimum_size = Vector2(0, gap)
+	parent.add_child(space_below)
 
 func _make_spin(prop: String, min_v: float, max_v: float, step: float) -> SpinBox:
 	var s := SpinBox.new()

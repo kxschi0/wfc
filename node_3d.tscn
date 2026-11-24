@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bi8sojucrygx1"]
+
+[ext_resource type="Script" uid="uid://cgokmfqdanitd" path="res://addons/wfc_gen_dock/scripts/city_generator.gd" id="1_6iypd"]
+[ext_resource type="PackedScene" uid="uid://b7qkhb81eipac" path="res://addons/wfc_gen_dock/Assets/cubebldg_6.tscn" id="2_tereu"]
+[ext_resource type="PackedScene" uid="uid://drlxy2u2exaan" path="res://addons/wfc_gen_dock/Assets/cubebldg_10.tscn" id="3_cdqbm"]
+[ext_resource type="PackedScene" uid="uid://b74d3aurntuot" path="res://addons/wfc_gen_dock/Assets/711.tscn" id="4_imku0"]
+[ext_resource type="PackedScene" uid="uid://cuuaottaa60at" path="res://addons/wfc_gen_dock/Assets/sarisaristore.tscn" id="5_wlxy5"]
+[ext_resource type="PackedScene" uid="uid://bd8mymn4liwor" path="res://addons/wfc_gen_dock/Assets/cubebldg_1.tscn" id="6_3v7ru"]
+[ext_resource type="PackedScene" uid="uid://vagqywyvu6lm" path="res://addons/wfc_gen_dock/Assets/cubebldg_7.tscn" id="7_tcnuu"]
+[ext_resource type="PackedScene" uid="uid://cb3jqrbheolb8" path="res://addons/wfc_gen_dock/Assets/cubebldg_8.tscn" id="8_tuemg"]
+[ext_resource type="PackedScene" uid="uid://d3qiospt7hlp6" path="res://addons/wfc_gen_dock/Assets/cubebldg_9.tscn" id="9_i0g27"]
+[ext_resource type="PackedScene" uid="uid://c24tknygu3k0r" path="res://addons/wfc_gen_dock/Assets/roof.tscn" id="10_ealrb"]
+
+[node name="Node3D" type="Node3D" unique_id=902082500]
+
+[node name="CityGenerator" type="Node3D" parent="." unique_id=1021035305]
+script = ExtResource("1_6iypd")
+horizontal_streets = 2
+blocks = 2
+sidewalk_border = false
+tile_size = 4.0
+density = 0.15
+delay = 0.0
+ground_buildings = Array[PackedScene]([ExtResource("2_tereu"), ExtResource("3_cdqbm"), ExtResource("4_imku0"), ExtResource("5_wlxy5")])
+middle_buildings = Array[PackedScene]([ExtResource("6_3v7ru"), ExtResource("7_tcnuu"), ExtResource("8_tuemg"), ExtResource("9_i0g27")])
+middle_styles = Array[int]([1, 2, 3, 4])
+roof_scene = ExtResource("10_ealrb")
+add_collision = false
+merge_ground = true
+seed_value = 3180757533
+
+[node name="KolapsaTiles" type="Node3D" parent="CityGenerator" unique_id=316692724]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
